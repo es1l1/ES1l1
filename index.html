@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070b09">
+  <meta name="description" content="ES1l1 — turn images and ideas into terminal-style ASCII art.">
+  <title>ES1l1 — ASCII Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="ES1l1 home"><span class="brand-mark">E<span>S</span></span><span>ES1l1<span class="brand-sub">ASCII STUDIO</span></span></a>
+    <div class="top-status"><span class="status-dot"></span> SYSTEM ONLINE <span class="version">v1.0</span></div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow"><span></span> TEXT-BASED IMAGE ENGINE</div>
+      <h1>Make pixels speak<span>.</span></h1>
+      <p class="hero-copy">Turn images and videos into moving terminal art. Your media stays in your browser.</p>
+    </section>
+
+    <section class="workspace">
+      <aside class="controls panel">
+        <div class="panel-heading"><div><span class="mini-index">01</span><h2>INPUT SOURCE</h2></div><span class="live-tag">LOCAL MODE</span></div>
+        <div class="tabs" role="tablist" aria-label="Input type">
+          <button class="tab active" id="imageTab" role="tab" aria-selected="true">▧ IMAGE</button>
+          <button class="tab" id="textTab" role="tab" aria-selected="false">⌘ PROMPT</button>
+        </div>
+
+        <div id="imagePanel" class="input-panel">
+          <label class="dropzone" id="dropzone" for="imageInput">
+            <input id="imageInput" type="file" accept="image/*,video/mp4,video/webm,video/quicktime">
+            <span class="upload-icon">＋</span>
+            <strong>Drop an image or video here</strong>
+            <span class="muted">or <u>browse files</u></span>
+            <small>PNG · JPG · WEBP · MP4 · WEBM · MOV</small>
+          </label>
+          <div class="file-info" id="fileInfo">NO MEDIA SELECTED</div>
+          <div class="media-controls hidden" id="mediaControls">
+            <div class="media-control-top">
+              <span class="media-label">VIDEO PLAYBACK</span>
+              <span class="media-time" id="mediaTime">00:00 / 00:00</span>
+            </div>
+            <div class="media-control-actions">
+              <button class="small-button primary" id="playBtn" type="button">Ⅱ PAUSE</button>
+              <label class="speed-label" for="speedSelect">SPEED</label>
+              <select id="speedSelect" class="speed-select">
+                <option value="0.5">0.5×</option>
+                <option value="0.75">0.75×</option>
+                <option value="1" selected>1×</option>
+                <option value="1.25">1.25×</option>
+                <option value="1.5">1.5×</option>
+                <option value="2">2×</option>
+              </select>
+            </div>
+            <input type="range" id="videoSeek" min="0" max="1000" value="0" step="1" aria-label="Seek video">
+          </div>
+        </div>
+
+        <div id="textPanel" class="input-panel hidden">
+          <label class="field-label" for="promptInput">DESCRIBE YOUR SCENE</label>
+          <textarea id="promptInput" maxlength="180" placeholder="A small house under the moon..."></textarea>
+          <div class="prompt-hint">Try: cat, car, house, tree, moon, city, mountain.</div>
+          <button class="action-button full" id="promptBtn">GENERATE FROM PROMPT <span>↗</span></button>
+          <p class="tiny-note">Prompt mode uses built-in text patterns. It does not call an AI image-generation service.</p>
+        </div>
+
+        <div class="settings">
+          <div class="section-label"><span class="mini-index">02</span> RENDER SETTINGS</div>
+          <div class="setting-row"><label for="widthRange">CHARACTER WIDTH</label><output id="widthValue">100</output></div>
+          <input type="range" id="widthRange" min="40" max="180" value="100">
+          <div class="setting-row"><label for="contrastRange">CONTRAST</label><output id="contrastValue">1.2</output></div>
+          <input type="range" id="contrastRange" min="0.5" max="2" step="0.1" value="1.2">
+          <div class="setting-row"><label for="paletteSelect">CHARACTER SET</label></div>
+          <select id="paletteSelect">
+            <option value="standard">Standard ASCII</option>
+            <option value="blocks">Dense blocks</option>
+            <option value="binary">Binary</option>
+            <option value="minimal">Minimal</option>
+          </select>
+          <div class="setting-row"><label for="colorSelect">TERMINAL COLOR</label></div>
+          <select id="colorSelect">
+            <option value="green">Matrix green</option>
+            <option value="white">Phosphor white</option>
+            <option value="amber">Amber</option>
+            <option value="cyan">Cyber cyan</option>
+          </select>
+          <button class="action-button full" id="renderBtn" disabled>RENDER FRAME <span>↗</span></button>
+        </div>
+      </aside>
+
+      <section class="output panel">
+        <div class="panel-heading output-heading"><div><span class="mini-index">03</span><h2>TERMINAL OUTPUT</h2></div><div class="window-dots"><i></i><i></i><i></i></div></div>
+        <div class="terminal-bar"><span>es1l1@studio:~</span><span id="terminalState">WAITING FOR INPUT</span></div>
+        <div class="terminal-screen" id="terminalScreen">
+          <div class="welcome" id="welcome">
+            <pre class="welcome-art">  ______ _____  _      _ _ 
+ |  ____/ ____|| |    (_) |
+ | |__ | (___  | |     _| |
+ |  __| \___ \ | |    | | |
+ | |____ ____) || |____| | |
+ |______|_____/ |______|_|_|</pre>
+            <p><span class="prompt-symbol">›</span> Your output will appear here.</p>
+            <p class="muted">Upload an image or switch to prompt mode.</p>
+            <span class="cursor"></span>
+          </div>
+          <pre id="asciiOutput" class="ascii-output hidden" aria-label="ASCII art output"></pre>
+        </div>
+        <div class="output-footer">
+          <div class="output-meta"><span id="outputDimensions">0 × 0 CHARS</span><span id="outputStatus">NO OUTPUT</span><span id="fpsStatus">— FPS</span></div>
+          <div class="output-actions">
+            <button class="small-button" id="copyBtn" disabled>▣ COPY</button>
+            <button class="small-button primary" id="downloadBtn" disabled>↓ SAVE .TXT</button>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="bottom-strip">
+      <div><span class="strip-icon">⌁</span><span><b>100% CLIENT-SIDE</b><small>Your image stays on your device.</small></span></div>
+      <div><span class="strip-icon">▤</span><span><b>PLAIN TEXT OUTPUT</b><small>Copy it, save it, share it.</small></span></div>
+      <div><span class="strip-icon">◉</span><span><b>NO API KEY</b><small>Works as a static GitHub Pages site.</small></span></div>
+    </section>
+    <footer><span>ES1l1 <span class="green">■</span> ASCII STUDIO</span><span>BUILT FOR THE TERMINAL GENERATION.</span></footer>
+  </main>
+  <canvas id="workCanvas" class="hidden"></canvas><video id="sourceVideo" class="hidden" playsinline muted></video>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
