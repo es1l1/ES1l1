@@ -1,136 +1,391 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#070b09">
-  <meta name="description" content="ES1l1 — turn images and ideas into terminal-style ASCII art.">
-  <title>ES1l1 — ASCII Studio</title>
+  <meta name="theme-color" content="#04070a">
+  <meta name="description" content="ES1l1 — a bilingual procedural scene studio that turns prompts, images and videos into animated ASCII art. Everything runs locally in your browser.">
+  <title>ES1l1 — ASCII &amp; Scene Studio</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2304070a'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='22' font-weight='700' text-anchor='middle' fill='%238dffb0'%3EES%3C/text%3E%3Ctext x='32' y='54' font-family='monospace' font-size='10' text-anchor='middle' fill='%235f8f78'%3E1l1%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <a class="skip-link" href="#main" data-i18n="a11y.skip">Skip to content</a>
+  <div class="bg-aurora" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
   <div class="scanlines" aria-hidden="true"></div>
+
   <header class="topbar">
-    <a class="brand" href="#" aria-label="ES1l1 home"><span class="brand-mark">E<span>S</span></span><span>ES1l1<span class="brand-sub">ASCII STUDIO</span></span></a>
-    <div class="top-status"><span class="status-dot"></span> SYSTEM ONLINE <span class="version">v1.0</span></div>
+    <a class="brand" href="#main" aria-label="ES1l1">
+      <span class="brand-mark">E<span>S</span></span>
+      <span class="brand-text">ES1l1<span class="brand-sub" data-i18n="brand.sub">ASCII &amp; SCENE STUDIO</span></span>
+    </a>
+
+    <nav class="main-nav" aria-label="Studios">
+      <button class="nav-btn is-active" type="button" data-view="prompt" aria-current="page">
+        <span class="nav-glyph">⌘</span><span data-i18n="nav.prompt">Prompt</span>
+      </button>
+      <button class="nav-btn" type="button" data-view="image">
+        <span class="nav-glyph">▧</span><span data-i18n="nav.image">Image</span>
+      </button>
+      <button class="nav-btn" type="button" data-view="video">
+        <span class="nav-glyph">▶</span><span data-i18n="nav.video">Video</span>
+      </button>
+    </nav>
+
+    <div class="top-actions">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="lang-btn is-active">EN</button>
+        <button type="button" data-lang="ar" class="lang-btn">ع</button>
+      </div>
+      <button class="icon-btn" id="settingsBtn" type="button" aria-label="Settings" data-i18n-aria="nav.settings" title="Settings">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+      </button>
+      <div class="system-chip"><span class="status-dot"></span><span data-i18n="common.local">100% LOCAL</span></div>
+    </div>
   </header>
 
-  <main class="shell">
-    <section class="hero">
-      <div class="eyebrow"><span></span> TEXT-BASED IMAGE ENGINE</div>
-      <h1>Make pixels speak<span>.</span></h1>
-      <p class="hero-copy">Turn images and videos into moving terminal art. Your media stays in your browser.</p>
+  <main id="main" class="shell">
+    <section class="intro">
+      <div class="eyebrow"><span></span><span data-i18n="app.eyebrow">PROCEDURAL SCENE ENGINE · v2.0</span></div>
+      <h1><span data-i18n="app.heroTitle">Make pixels</span> <span class="accent" data-i18n="app.heroAccent">speak.</span></h1>
+      <p class="hero-lead" data-i18n="app.heroLead">Describe a scene, upload media, and watch it become living terminal art. Prompt interpretation, procedural animation and ASCII rendering all happen on your device.</p>
+      <div class="hero-badges">
+        <span class="hero-badge"><i>◉</i><span data-i18n="app.badge1">Arabic + English prompts</span></span>
+        <span class="hero-badge"><i>⌁</i><span data-i18n="app.badge2">No API keys · no uploads</span></span>
+        <span class="hero-badge"><i>▤</i><span data-i18n="app.badge3">PNG · TXT · WebM exports</span></span>
+      </div>
     </section>
 
-    <section class="workspace">
-      <aside class="controls panel">
-        <div class="panel-heading"><div><span class="mini-index">01</span><h2>INPUT SOURCE</h2></div><span class="live-tag">LOCAL MODE</span></div>
-        <div class="tabs" role="tablist" aria-label="Input type">
-          <button class="tab active" id="imageTab" role="tab" aria-selected="true">▧ IMAGE</button>
-          <button class="tab" id="textTab" role="tab" aria-selected="false">⌘ PROMPT</button>
-        </div>
+    <!-- ============ PROMPT STUDIO ============ -->
+    <section class="view is-active" id="view-prompt" data-view-panel="prompt">
+      <div class="studio-grid">
+        <aside class="panel control-panel">
+          <div class="panel-head"><div><span class="panel-index">01</span><h2 data-i18n="prompt.title">Prompt studio</h2></div><span class="mini-tag" data-i18n="prompt.localTag">OFFLINE PARSER</span></div>
+          <p class="panel-lead" data-i18n="prompt.lead">Write a scene in Arabic or English. ES1l1 reads its environment, subject, weather, light and camera intent, then renders it procedurally.</p>
 
-        <div id="imagePanel" class="input-panel">
-          <label class="dropzone" id="dropzone" for="imageInput">
-            <input id="imageInput" type="file" accept="image/*,video/mp4,video/webm,video/quicktime">
-            <span class="upload-icon">＋</span>
-            <strong>Drop an image or video here</strong>
-            <span class="muted">or <u>browse files</u></span>
-            <small>PNG · JPG · WEBP · MP4 · WEBM · MOV</small>
-          </label>
-          <div class="file-info" id="fileInfo">NO MEDIA SELECTED</div>
-          <div class="media-controls hidden" id="mediaControls">
-            <div class="media-control-top">
-              <span class="media-label">VIDEO PLAYBACK</span>
-              <span class="media-time" id="mediaTime">00:00 / 00:00</span>
-            </div>
-            <div class="media-control-actions">
-              <button class="small-button primary" id="playBtn" type="button">Ⅱ PAUSE</button>
-              <label class="speed-label" for="speedSelect">SPEED</label>
-              <select id="speedSelect" class="speed-select">
-                <option value="0.5">0.5×</option>
-                <option value="0.75">0.75×</option>
-                <option value="1" selected>1×</option>
-                <option value="1.25">1.25×</option>
-                <option value="1.5">1.5×</option>
-                <option value="2">2×</option>
+          <label class="field-label" for="promptInput" data-i18n="prompt.label">Describe your scene</label>
+          <textarea id="promptInput" rows="5" maxlength="600" data-i18n-placeholder="prompt.placeholder" placeholder="A lone traveler walking through a dark pine forest in the rain, camera following, moonlight between the trees..."></textarea>
+          <div class="prompt-meta"><span id="promptCount">0 / 600</span><button type="button" class="text-btn" id="promptClearBtn" data-i18n="common.clear">Clear</button></div>
+
+          <div class="examples-label" data-i18n="prompt.examples">Try an example</div>
+          <div class="example-list" id="promptExamples"></div>
+
+          <button class="action-btn" id="generateBtn" type="button">
+            <span data-i18n="prompt.generate">Generate scene</span><span class="btn-arrow">↗</span>
+          </button>
+          <p class="tiny-note" data-i18n="prompt.note">Procedural, rule-based interpretation — not a neural image generator. This boundary is intentional and honest.</p>
+
+          <div class="divider"></div>
+          <div class="quick-controls">
+            <div class="control-row"><label class="field-label" for="promptPalette" data-i18n="ascii.palette">Character set</label>
+              <select id="promptPalette" class="q-palette input-select">
+                <option value="standard">Standard ASCII</option>
+                <option value="detailed">Detailed ramp</option>
+                <option value="blocks">Dense blocks</option>
+                <option value="binary">Binary</option>
+                <option value="minimal">Minimal</option>
+                <option value="matrix">Katakana</option>
               </select>
             </div>
-            <input type="range" id="videoSeek" min="0" max="1000" value="0" step="1" aria-label="Seek video">
+            <div class="control-row"><label class="field-label" for="promptColor" data-i18n="ascii.colorMode">Color mode</label>
+              <select id="promptColor" class="q-color input-select">
+                <option value="mono" data-i18n="ascii.mono">Monochrome</option>
+                <option value="color" data-i18n="ascii.color">Full color</option>
+                <option value="grayscale" data-i18n="ascii.grayscale">Grayscale</option>
+              </select>
+            </div>
+            <div class="setting-row"><label for="promptDensity" data-i18n="ascii.density">Character density</label><output class="q-density-value">100</output></div>
+            <input type="range" id="promptDensity" class="q-density" min="48" max="180" step="2" value="100">
           </div>
-        </div>
+        </aside>
 
-        <div id="textPanel" class="input-panel hidden">
-          <label class="field-label" for="promptInput">DESCRIBE YOUR SCENE</label>
-          <textarea id="promptInput" maxlength="180" placeholder="A small house under the moon..."></textarea>
-          <div class="prompt-hint">Try: cat, car, house, tree, moon, city, mountain.</div>
-          <button class="action-button full" id="promptBtn">GENERATE FROM PROMPT <span>↗</span></button>
-          <p class="tiny-note">Prompt mode uses built-in text patterns. It does not call an AI image-generation service.</p>
-        </div>
-
-        <div class="settings">
-          <div class="section-label"><span class="mini-index">02</span> RENDER SETTINGS</div>
-          <div class="setting-row"><label for="widthRange">CHARACTER WIDTH</label><output id="widthValue">100</output></div>
-          <input type="range" id="widthRange" min="40" max="180" value="100">
-          <div class="setting-row"><label for="contrastRange">CONTRAST</label><output id="contrastValue">1.2</output></div>
-          <input type="range" id="contrastRange" min="0.5" max="2" step="0.1" value="1.2">
-          <div class="setting-row"><label for="paletteSelect">CHARACTER SET</label></div>
-          <select id="paletteSelect">
-            <option value="standard">Standard ASCII</option>
-            <option value="blocks">Dense blocks</option>
-            <option value="binary">Binary</option>
-            <option value="minimal">Minimal</option>
-          </select>
-          <div class="setting-row"><label for="colorSelect">TERMINAL COLOR</label></div>
-          <select id="colorSelect">
-            <option value="green">Matrix green</option>
-            <option value="white">Phosphor white</option>
-            <option value="amber">Amber</option>
-            <option value="cyan">Cyber cyan</option>
-          </select>
-          <button class="action-button full" id="renderBtn" disabled>RENDER FRAME <span>↗</span></button>
-        </div>
-      </aside>
-
-      <section class="output panel">
-        <div class="panel-heading output-heading"><div><span class="mini-index">03</span><h2>TERMINAL OUTPUT</h2></div><div class="window-dots"><i></i><i></i><i></i></div></div>
-        <div class="terminal-bar"><span>es1l1@studio:~</span><span id="terminalState">WAITING FOR INPUT</span></div>
-        <div class="terminal-screen" id="terminalScreen">
-          <div class="welcome" id="welcome">
-            <pre class="welcome-art">  ______ _____  _      _ _ 
- |  ____/ ____|| |    (_) |
- | |__ | (___  | |     _| |
- |  __| \___ \ | |    | | |
- | |____ ____) || |____| | |
- |______|_____/ |______|_|_|</pre>
-            <p><span class="prompt-symbol">›</span> Your output will appear here.</p>
-            <p class="muted">Upload an image or switch to prompt mode.</p>
-            <span class="cursor"></span>
+        <section class="stage-column">
+          <div class="panel stage-panel">
+            <div class="panel-head stage-head">
+              <div><span class="panel-index">02</span><h2 data-i18n="prompt.scene">Scene preview</h2></div>
+              <div class="toolbar">
+                <span class="state-pill" id="sceneState"><i></i><span data-i18n="status.ready">READY</span></span>
+                <button class="tool-btn" id="scenePlayBtn" type="button" aria-label="Play/Pause scene"><span class="icon">Ⅱ</span></button>
+                <select class="tool-select" id="sceneSpeed" aria-label="Scene speed">
+                  <option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option>
+                </select>
+                <button class="tool-btn wide" id="scenePngBtn" type="button" data-i18n="common.png">PNG</button>
+                <button class="tool-btn icon-only" id="sceneFullBtn" type="button" aria-label="Fullscreen scene" title="Fullscreen">⛶</button>
+              </div>
+            </div>
+            <div class="canvas-frame scene-frame" id="sceneFrame">
+              <canvas id="sceneCanvas" width="1280" height="720" role="img" aria-label="Procedurally rendered scene preview"></canvas>
+              <div class="frame-hud"><span id="sceneSpecHud">ENV — · SUBJECT —</span><span class="frame-res">1280×720</span></div>
+            </div>
           </div>
-          <pre id="asciiOutput" class="ascii-output hidden" aria-label="ASCII art output"></pre>
-        </div>
-        <div class="output-footer">
-          <div class="output-meta"><span id="outputDimensions">0 × 0 CHARS</span><span id="outputStatus">NO OUTPUT</span><span id="fpsStatus">— FPS</span></div>
-          <div class="output-actions">
-            <button class="small-button" id="copyBtn" disabled>▣ COPY</button>
-            <button class="small-button primary" id="downloadBtn" disabled>↓ SAVE .TXT</button>
+
+          <div class="panel stage-panel ascii-panel">
+            <div class="panel-head stage-head">
+              <div><span class="panel-index">03</span><h2 data-i18n="prompt.terminal">ASCII terminal</h2></div>
+              <div class="toolbar">
+                <span class="fps-pill" id="promptFps">— FPS</span>
+                <button class="tool-btn" id="promptPlayBtn" type="button" aria-label="Play/Pause animation"><span class="icon">Ⅱ</span></button>
+                <button class="tool-btn record-btn" id="promptRecBtn" type="button"><i class="rec-dot"></i><span data-i18n="common.record">REC</span></button>
+                <button class="tool-btn wide" id="promptPngBtn" type="button" data-i18n="common.png">PNG</button>
+                <button class="tool-btn wide" id="promptTxtBtn" type="button" data-i18n="common.txt">TXT</button>
+                <button class="tool-btn icon-only" id="promptFullBtn" type="button" aria-label="Fullscreen terminal" title="Fullscreen">⛶</button>
+              </div>
+            </div>
+            <div class="terminal-shell" id="promptTerminalWrap">
+              <div class="terminal-bar"><span class="terminal-path">es1l1@studio:~$</span><span class="terminal-status" id="promptTerminalState" data-i18n="status.waiting">WAITING FOR SCENE</span><span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+              <div class="ascii-stage" id="promptAsciiStage">
+                <canvas id="promptAscii" role="img" aria-label="Animated ASCII rendering of the scene"></canvas>
+              </div>
+            </div>
+            <div class="terminal-meta"><span id="promptAsciiDims">0 × 0 CHARS</span><span id="promptAsciiMode">MONO</span><span data-i18n="prompt.terminalHint">Canvas-rendered terminal · no DOM spam</span></div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <aside class="panel analysis-panel">
+          <div class="panel-head"><div><span class="panel-index">04</span><h2 data-i18n="analysis.title">Analysis</h2></div><span class="mini-tag" id="analysisBadge" data-i18n="analysis.badgePrompt">KEYWORD MODEL</span></div>
+          <div class="analysis-body" id="analysisBody"></div>
+          <p class="analysis-note" id="analysisNote" data-i18n="analysis.promptNote">Interpretation is keyword-based and visual output is procedural. ES1l1 does not claim neural scene recognition.</p>
+        </aside>
+      </div>
     </section>
 
-    <section class="bottom-strip">
-      <div><span class="strip-icon">⌁</span><span><b>100% CLIENT-SIDE</b><small>Your image stays on your device.</small></span></div>
-      <div><span class="strip-icon">▤</span><span><b>PLAIN TEXT OUTPUT</b><small>Copy it, save it, share it.</small></span></div>
-      <div><span class="strip-icon">◉</span><span><b>NO API KEY</b><small>Works as a static GitHub Pages site.</small></span></div>
+    <!-- ============ IMAGE STUDIO ============ -->
+    <section class="view" id="view-image" data-view-panel="image" hidden>
+      <div class="studio-grid">
+        <aside class="panel control-panel">
+          <div class="panel-head"><div><span class="panel-index">01</span><h2 data-i18n="image.title">Image studio</h2></div><span class="mini-tag" data-i18n="common.localTag">LOCAL</span></div>
+          <p class="panel-lead" data-i18n="image.lead">Convert any browser-supported image into character art. The file never leaves your device.</p>
+
+          <label class="dropzone" id="imageDrop" for="imageInput">
+            <input id="imageInput" type="file" accept="image/*" class="visually-hidden">
+            <span class="drop-icon">＋</span>
+            <strong data-i18n="image.drop">Drop an image here</strong>
+            <span class="muted" data-i18n="image.dropHint">or click to browse</span>
+            <small data-i18n="image.formats">PNG · JPG · WEBP · GIF · BMP</small>
+          </label>
+          <div class="file-row"><span class="file-name" id="imageName" data-i18n="image.none">No image selected</span><button class="text-btn" id="imageClearBtn" type="button" data-i18n="common.clear">Clear</button></div>
+
+          <div class="divider"></div>
+          <div class="control-stack">
+            <div class="control-row"><label class="field-label" for="imagePalette" data-i18n="ascii.palette">Character set</label>
+              <select id="imagePalette" class="q-palette input-select">
+                <option value="standard">Standard ASCII</option><option value="detailed">Detailed ramp</option><option value="blocks">Dense blocks</option><option value="binary">Binary</option><option value="minimal">Minimal</option><option value="matrix">Katakana</option>
+              </select>
+            </div>
+            <div class="control-row"><label class="field-label" for="imageColor" data-i18n="ascii.colorMode">Color mode</label>
+              <select id="imageColor" class="q-color input-select">
+                <option value="color" data-i18n="ascii.color">Full color</option><option value="mono" data-i18n="ascii.mono">Monochrome</option><option value="grayscale" data-i18n="ascii.grayscale">Grayscale</option>
+              </select>
+            </div>
+            <div class="setting-row"><label for="imageDensity" data-i18n="ascii.density">Character density</label><output class="q-density-value">120</output></div>
+            <input type="range" id="imageDensity" class="q-density" min="48" max="200" step="2" value="120">
+            <div class="setting-row"><label for="imageBrightness" data-i18n="image.brightness">Brightness</label><output id="imageBrightnessVal">1.00</output></div>
+            <input type="range" id="imageBrightness" min="0.4" max="1.8" step="0.05" value="1">
+            <div class="setting-row"><label for="imageContrast" data-i18n="image.contrast">Contrast</label><output id="imageContrastVal">1.10</output></div>
+            <input type="range" id="imageContrast" min="0.4" max="2.2" step="0.05" value="1.1">
+            <label class="switch-row"><span data-i18n="image.invert">Invert luminance</span><input type="checkbox" id="imageInvert"><span class="switch" aria-hidden="true"></span></label>
+          </div>
+
+          <div class="button-row">
+            <button class="action-btn small" id="imagePngBtn" type="button" disabled><span data-i18n="image.exportPng">Export PNG</span></button>
+            <button class="action-btn small ghost" id="imageTxtBtn" type="button" disabled><span data-i18n="common.txt">TXT</span></button>
+          </div>
+        </aside>
+
+        <section class="stage-column">
+          <div class="panel stage-panel">
+            <div class="panel-head stage-head">
+              <div><span class="panel-index">02</span><h2 data-i18n="image.compare">Before / after</h2></div>
+              <div class="toolbar">
+                <span class="state-pill" id="imageState"><i></i><span data-i18n="status.noMedia">NO MEDIA</span></span>
+                <button class="tool-btn icon-only" id="imageFullBtn" type="button" aria-label="Fullscreen image comparison" title="Fullscreen">⛶</button>
+              </div>
+            </div>
+            <div class="compare-shell" id="imageCompareShell">
+              <div class="media-frame empty-frame" id="imageEmpty">
+                <div class="empty-state"><span class="empty-glyph">▧</span><p data-i18n="image.empty">Upload an image to start converting.</p></div>
+              </div>
+              <div class="media-frame compare-frame is-hidden" id="imageFrame">
+                <img id="imageOriginal" alt="Original uploaded image">
+                <canvas id="imageAscii" aria-label="ASCII conversion of the uploaded image"></canvas>
+                <span class="compare-label left" data-i18n="image.original">ORIGINAL</span>
+                <span class="compare-label right" data-i18n="image.ascii">ASCII</span>
+                <div class="compare-divider" id="compareDivider" aria-hidden="true"><span></span></div>
+              </div>
+              <input type="range" id="imageCompare" min="0" max="100" value="55" step="1" aria-label="Before and after comparison slider">
+            </div>
+            <div class="terminal-meta"><span id="imageAsciiDims">0 × 0 CHARS</span><span id="imagePaletteLabel">—</span><span id="imageCompareLabel">ORIGINAL 55%</span></div>
+          </div>
+        </section>
+
+        <aside class="panel analysis-panel">
+          <div class="panel-head"><div><span class="panel-index">03</span><h2 data-i18n="analysis.title">Analysis</h2></div><span class="mini-tag" data-i18n="analysis.badgeImage">PIXEL STATS</span></div>
+          <div class="analysis-body" id="imageAnalysis"></div>
+          <p class="analysis-note" data-i18n="analysis.imageNote">Measurements are computed locally from pixel data: dimensions, luminance statistics, edge density and dominant color clusters. Object recognition is not performed.</p>
+        </aside>
+      </div>
     </section>
-    <footer><span>ES1l1 <span class="green">■</span> ASCII STUDIO</span><span>BUILT FOR THE TERMINAL GENERATION.</span></footer>
+
+    <!-- ============ VIDEO STUDIO ============ -->
+    <section class="view" id="view-video" data-view-panel="video" hidden>
+      <div class="studio-grid">
+        <aside class="panel control-panel">
+          <div class="panel-head"><div><span class="panel-index">01</span><h2 data-i18n="video.title">Video studio</h2></div><span class="mini-tag" data-i18n="common.localTag">LOCAL</span></div>
+          <p class="panel-lead" data-i18n="video.lead">Play a local video as live ASCII. Frames are sampled on a canvas, so the page stays responsive.</p>
+
+          <label class="dropzone" id="videoDrop" for="videoInput">
+            <input id="videoInput" type="file" accept="video/*" class="visually-hidden">
+            <span class="drop-icon">▶</span>
+            <strong data-i18n="video.drop">Drop a video here</strong>
+            <span class="muted" data-i18n="video.dropHint">or click to browse</span>
+            <small data-i18n="video.formats">MP4 · WEBM · MOV (browser supported)</small>
+          </label>
+          <div class="file-row"><span class="file-name" id="videoName" data-i18n="video.none">No video selected</span><button class="text-btn" id="videoClearBtn" type="button" data-i18n="common.clear">Clear</button></div>
+
+          <div class="divider"></div>
+          <div class="control-stack">
+            <div class="control-row"><label class="field-label" for="videoPalette" data-i18n="ascii.palette">Character set</label>
+              <select id="videoPalette" class="q-palette input-select">
+                <option value="standard">Standard ASCII</option><option value="detailed">Detailed ramp</option><option value="blocks">Dense blocks</option><option value="binary">Binary</option><option value="minimal">Minimal</option><option value="matrix">Katakana</option>
+              </select>
+            </div>
+            <div class="control-row"><label class="field-label" for="videoColor" data-i18n="ascii.colorMode">Color mode</label>
+              <select id="videoColor" class="q-color input-select">
+                <option value="color" data-i18n="ascii.color">Full color</option><option value="mono" data-i18n="ascii.mono">Monochrome</option><option value="grayscale" data-i18n="ascii.grayscale">Grayscale</option>
+              </select>
+            </div>
+            <div class="setting-row"><label for="videoDensity" data-i18n="ascii.density">Character density</label><output class="q-density-value">110</output></div>
+            <input type="range" id="videoDensity" class="q-density" min="40" max="180" step="2" value="110">
+            <div class="setting-row"><label for="videoFps" data-i18n="ascii.fps">ASCII frame rate</label><output id="videoFpsVal">18</output></div>
+            <input type="range" id="videoFps" min="6" max="30" step="1" value="18">
+            <div class="setting-row"><label for="videoBrightness" data-i18n="image.brightness">Brightness</label><output id="videoBrightnessVal">1.00</output></div>
+            <input type="range" id="videoBrightness" min="0.4" max="1.8" step="0.05" value="1">
+            <div class="setting-row"><label for="videoContrast" data-i18n="image.contrast">Contrast</label><output id="videoContrastVal">1.00</output></div>
+            <input type="range" id="videoContrast" min="0.4" max="2.2" step="0.05" value="1">
+            <label class="switch-row"><span data-i18n="image.invert">Invert luminance</span><input type="checkbox" id="videoInvert"><span class="switch" aria-hidden="true"></span></label>
+          </div>
+
+          <div class="button-row">
+            <button class="action-btn small" id="videoRecBtn" type="button"><i class="rec-dot"></i><span data-i18n="video.record">Record WebM</span></button>
+            <button class="action-btn small ghost" id="videoPngBtn" type="button" disabled><span data-i18n="common.png">PNG</span></button>
+            <button class="action-btn small ghost" id="videoTxtBtn" type="button" disabled><span data-i18n="common.txt">TXT</span></button>
+          </div>
+        </aside>
+
+        <section class="stage-column">
+          <div class="panel stage-panel">
+            <div class="panel-head stage-head">
+              <div><span class="panel-index">02</span><h2 data-i18n="video.preview">Video → ASCII</h2></div>
+              <div class="toolbar"><span class="state-pill" id="videoState"><i></i><span data-i18n="status.noMedia">NO MEDIA</span></span><span class="fps-pill" id="videoFpsLive">— FPS</span></div>
+            </div>
+            <div class="video-grid">
+              <div class="media-frame video-frame empty-frame" id="videoEmpty">
+                <div class="empty-state"><span class="empty-glyph">▶</span><p data-i18n="video.empty">Upload a video to begin.</p></div>
+              </div>
+              <div class="video-panes is-hidden" id="videoPanes">
+                <div class="pane">
+                  <span class="pane-label" data-i18n="image.original">ORIGINAL</span>
+                  <video id="videoPreview" playsinline muted></video>
+                </div>
+                <div class="pane">
+                  <span class="pane-label" data-i18n="image.ascii">ASCII</span>
+                  <canvas id="videoAscii" aria-label="Live ASCII rendering of the video"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="transport">
+              <button class="transport-btn" id="videoPlayBtn" type="button" aria-label="Play or pause video" disabled>▶</button>
+              <span class="time-code" id="videoTime">00:00 / 00:00</span>
+              <input type="range" id="videoSeek" class="seek" min="0" max="1000" value="0" step="1" aria-label="Seek video" disabled>
+              <label class="speed-inline" for="videoSpeed"><span data-i18n="video.speed">SPEED</span>
+                <select id="videoSpeed">
+                  <option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option>
+                </select>
+              </label>
+            </div>
+            <div class="terminal-meta"><span id="videoAsciiDims">0 × 0 CHARS</span><span id="videoMetaInline">—</span><span id="videoRecordState" data-i18n="video.recordHint">WebM recording where your browser supports it</span></div>
+          </div>
+        </section>
+
+        <aside class="panel analysis-panel">
+          <div class="panel-head"><div><span class="panel-index">03</span><h2 data-i18n="analysis.title">Analysis</h2></div><span class="mini-tag" data-i18n="analysis.badgeVideo">MEDIA STATS</span></div>
+          <div class="analysis-body" id="videoAnalysis"></div>
+          <p class="analysis-note" data-i18n="analysis.videoNote">Metadata and sampled frame statistics are read locally. Frame-rate values come from the browser's frame callbacks when available and are estimates.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="capabilities" aria-label="Capabilities">
+      <div class="cap-card"><span class="cap-icon">◈</span><div><b data-i18n="cap.1t">Prompt → scene</b><p data-i18n="cap.1d">Arabic and English descriptions parsed into environment, subject, lighting, weather, camera and motion.</p></div></div>
+      <div class="cap-card"><span class="cap-icon">⌁</span><div><b data-i18n="cap.2t">Living ASCII</b><p data-i18n="cap.2d">Frame-accurate canvas terminal with density, palette, color, FPS and speed controls.</p></div></div>
+      <div class="cap-card"><span class="cap-icon">▤</span><div><b data-i18n="cap.3t">Local media</b><p data-i18n="cap.3d">Images and videos are processed in-browser with object URLs. Nothing is uploaded.</p></div></div>
+      <div class="cap-card"><span class="cap-icon">↓</span><div><b data-i18n="cap.4t">Real exports</b><p data-i18n="cap.4d">Download PNG frames, plain-text art and WebM recordings generated by your browser.</p></div></div>
+    </section>
+
+    <footer class="footer">
+      <span>ES1l1 <span class="accent">■</span> <span data-i18n="brand.sub">ASCII &amp; SCENE STUDIO</span></span>
+      <span data-i18n="footer.note">PROCEDURAL · BILINGUAL · 100% CLIENT-SIDE</span>
+    </footer>
   </main>
-  <canvas id="workCanvas" class="hidden"></canvas><video id="sourceVideo" class="hidden" playsinline muted></video>
-  <div class="toast" id="toast" role="status"></div>
-  <script src="script.js"></script>
+
+  <dialog id="settingsDialog" class="settings-dialog">
+    <form method="dialog" class="settings-form">
+      <div class="panel-head"><div><span class="panel-index">⚙</span><h2 data-i18n="settings.title">Studio settings</h2></div><button class="tool-btn icon-only" id="settingsClose" type="submit" aria-label="Close settings">✕</button></div>
+      <p class="panel-lead" data-i18n="settings.lead">Render defaults are saved locally and applied to all studios.</p>
+
+      <div class="settings-grid">
+        <label class="settings-field"><span data-i18n="settings.language">Language</span>
+          <select id="setLang" class="input-select"><option value="en">English</option><option value="ar">العربية</option></select>
+        </label>
+        <label class="settings-field"><span data-i18n="ascii.palette">Character set</span>
+          <select id="setPalette" class="input-select">
+            <option value="standard">Standard ASCII</option><option value="detailed">Detailed ramp</option><option value="blocks">Dense blocks</option><option value="binary">Binary</option><option value="minimal">Minimal</option><option value="matrix">Katakana</option>
+          </select>
+        </label>
+        <label class="settings-field"><span data-i18n="ascii.colorMode">Color mode</span>
+          <select id="setColorMode" class="input-select"><option value="mono" data-i18n="ascii.mono">Monochrome</option><option value="color" data-i18n="ascii.color">Full color</option><option value="grayscale" data-i18n="ascii.grayscale">Grayscale</option></select>
+        </label>
+        <label class="settings-field"><span data-i18n="settings.accent">Terminal color</span>
+          <select id="setAccent" class="input-select"><option value="green">Matrix green</option><option value="cyan">Cyber cyan</option><option value="violet">Ultra violet</option><option value="amber">Amber</option><option value="white">Phosphor white</option></select>
+        </label>
+        <label class="settings-field"><span data-i18n="ascii.fps">ASCII frame rate</span>
+          <input id="setFps" type="range" min="6" max="30" step="1" value="20"><output id="setFpsVal">20</output>
+        </label>
+        <label class="settings-field"><span data-i18n="ascii.density">Character density</span>
+          <input id="setDensity" type="range" min="48" max="180" step="2" value="100"><output id="setDensityVal">100</output>
+        </label>
+      </div>
+
+      <div class="toggle-list">
+        <label class="switch-row"><span data-i18n="settings.scanlines">CRT scanlines</span><input type="checkbox" id="setScanlines" checked><span class="switch" aria-hidden="true"></span></label>
+        <label class="switch-row"><span data-i18n="settings.reduceMotion">Reduce camera motion</span><input type="checkbox" id="setReduceMotion"><span class="switch" aria-hidden="true"></span></label>
+      </div>
+
+      <div class="shortcuts">
+        <div class="examples-label" data-i18n="settings.shortcuts">Keyboard shortcuts</div>
+        <div class="shortcut-grid">
+          <span><kbd>Space</kbd><em data-i18n="settings.shortcutPlay">Play / pause</em></span>
+          <span><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><em data-i18n="settings.shortcutView">Switch studio</em></span>
+          <span><kbd>F</kbd><em data-i18n="settings.shortcutFull">Fullscreen preview</em></span>
+          <span><kbd>Esc</kbd><em data-i18n="settings.shortcutSettings">Close dialog / exit fullscreen</em></span>
+        </div>
+      </div>
+
+      <div class="settings-actions">
+        <button class="action-btn ghost small" id="resetSettings" type="button" data-i18n="settings.reset">Restore defaults</button>
+        <button class="action-btn small" type="submit" data-i18n="common.done">Done</button>
+      </div>
+      <p class="tiny-note" data-i18n="settings.aboutText">ES1l1 v2.0 · static, offline-first creative software. No accounts, API keys, uploads or paid services.</p>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <canvas id="analysisCanvas" class="offscreen" aria-hidden="true"></canvas>
+  <canvas id="videoAnalysisCanvas" class="offscreen" aria-hidden="true"></canvas>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
